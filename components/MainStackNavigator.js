@@ -3,12 +3,12 @@ import { TouchableOpacity } from "react-native";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "./HomeScreen";
-import EventScreen from "./EventScreen";
-import ProfileScreen from "./ProfileScreen";
-import SettingsScreen from "./SettingsScreen";
-import MessagesScreen from "./MessagesScreen";
-import LoginScreen from "./LoginScreen";
+import HomeScreen from "../screens/HomeScreen";
+import EventScreen from "../screens/EventScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import SettingsScreen from "../screens/SettingsScreen";
+import MessagesScreen from "../screens/MessagesScreen";
+import LoginScreen from "../screens/LoginScreen";
 
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
