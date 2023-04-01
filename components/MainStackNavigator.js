@@ -9,6 +9,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import MessagesScreen from "../screens/MessagesScreen";
 import LoginScreen from "../screens/LoginScreen";
+import SignupScreen from "../screens/SignupScreen";
 
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -23,6 +24,11 @@ const HomeStack = () => {
         name="Login"
         component={LoginScreen}
         options={{ title: "Welcome" }}
+      />
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{ title: "Signup" }}
       />
       <Stack.Screen
         name="Home"
@@ -73,7 +79,6 @@ const MainTabNavigator = () => {
       screenOptions={{
         tabBarActiveTintColor: "#e91e63",
         inactiveTintColor: "gray",
-        tabStyle: { justifyContent: "center", alignItems: "center" },
       }}
     >
       <Tab.Screen
