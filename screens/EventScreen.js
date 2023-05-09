@@ -1,7 +1,13 @@
 import React from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import EventCart from "../components/EventCart";
+import { useNavigation } from "@react-navigation/native";
 
 const eventsData = [
   {
@@ -42,46 +48,35 @@ const eventsData = [
 ];
 
 const EventScreen = () => {
+  const navigation = useNavigation();
+
+  const handleEventPress = (eventId) => {
+    navigation.navigate("Event Detail", { eventId: eventId, eventsData });
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {eventsData.map((event) => (
-        <EventCart
+        <TouchableOpacity
           key={event.id}
-          date={event.date}
-          location={event.location}
-          sport={event.sport}
-          user={event.user}
-        />
+          onPress={() => handleEventPress(event.id)}
+        >
+          <EventCart
+            date={event.date}
+            location={event.location}
+            sport={event.sport}
+            user={event.user}
+          />
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-  },
-
-  eventCart: {
-    marginBottom: 20,
-  },
-
-  eventCartHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    backgroundColor: "#143D59",
     alignItems: "center",
-    marginBottom: 10,
-  },
-
-  eventCartTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-
-  eventCartDate: {
-    fontSize: 14,
-    color: "#666",
+    justifyContent: "center",
   },
 });
 

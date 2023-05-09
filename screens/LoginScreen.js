@@ -1,76 +1,92 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const LoginScreen = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const handleLogin = () => {
-        // burada login işlemini yapabilirsiniz, örneğin backend'e post request atabilirsiniz
-        console.log(`email: ${email}, password: ${password}`);
-        navigation.navigate('Home');
-    };
+  const handleLogin = () => {
+    // burada login işlemini yapabilirsiniz, örneğin backend'e post request atabilirsiniz
+    console.log(`email: ${email}, password: ${password}`);
+    navigation.navigate("Home");
+  };
 
-    return (
-        <View style={styles.container}>
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                onChangeText={setEmail}
-                value={email}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry
-                onChangeText={setPassword}
-                value={password}
-            />
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')} >
-                <Text style={styles.link}>Don't have an account? Sign up</Text>
-            </TouchableOpacity>
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        placeholderTextColor="#143D59"
+        onChangeText={(text) => setEmail(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        placeholderTextColor="#143D59"
+        secureTextEntry
+        onChangeText={(text) => setPassword(text)}
+      />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.link}
+        onPress={() => navigation.navigate("Signup")}
+      >
+        <Text style={styles.signUpText}>Don't have an account? Sign up</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff',
-        paddingHorizontal: 20,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 5,
-        width: '100%',
-        height: 50,
-        paddingHorizontal: 10,
-        marginBottom: 20,
-    },
-    button: {
-        backgroundColor: '#2196F3',
-        borderRadius: 5,
-        width: '100%',
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    link: {
-        color: 'blue',
-        marginTop: 20,
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#143D59",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: "bold",
+    color: "#F4B41A",
+    marginBottom: 20,
+  },
+  input: {
+    width: "80%",
+    backgroundColor: "#F4B41A",
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 20,
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#143D59",
+  },
+  button: {
+    width: "80%",
+    backgroundColor: "#F4B41A",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#143D59",
+  },
+  link: {
+    marginTop: 10,
+  },
+  signUpText: {
+    color: "#fff",
+  },
 });
 
 export default LoginScreen;

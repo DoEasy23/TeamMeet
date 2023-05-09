@@ -1,23 +1,76 @@
 import React from "react";
+import { TouchableOpacity } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-
 import HomeScreen from "../screens/HomeScreen";
+import EventScreen from "../screens/EventScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import MessagesScreen from "../screens/MessagesScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import MessagesScreen from "../screens/MessagesScreen";
+import LoginScreen from "../screens/LoginScreen";
+import SignupScreen from "../screens/SignupScreen";
+import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import EventDetailScreen from "../screens/EventDetailScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#143D59",
+        },
+        headerTintColor: "#F4B41A",
+      }}
+    >
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ title: "Welcome" }}
+      />
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{ title: "Signup" }}
+      />
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ headerMode: "none" }}
+        options={{ title: "Home" }}
+      />
+      <Stack.Screen
+        name="EventScreen"
+        component={EventScreen}
+        options={({ route }) => ({
+          title: route.params.sport + " Events in " + route.params.location,
+        })}
+      />
+      <Stack.Screen
+        name="Event Detail"
+        component={EventDetailScreen}
+        options={{ title: "Event Detail" }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const MessageStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#143D59",
+        },
+        headerTintColor: "#F4B41A",
+      }}
+    >
+      <Stack.Screen
+        name="Messages"
+        component={MessagesScreen}
+        options={{ title: "Messages" }}
       />
     </Stack.Navigator>
   );
@@ -25,14 +78,31 @@ const HomeStack = () => {
 
 const ProfileStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#143D59",
+        },
+        headerTintColor: "#F4B41A",
+      }}
+    >
       <Stack.Screen
-        name="Profile"
+        name="ProfileScreen"
         component={ProfileScreen}
-        options={{ title: "Profile" }}
+        options={({ navigation }) => ({
+          title: "Profile",
+          headerRight: () => (
+            <TouchableOpacity
+              style={{ marginRight: 10 }}
+              onPress={() => navigation.navigate("SettingsScreen")}
+            >
+              <MaterialIcons name="settings" size={24} color="#F4B41A" />
+            </TouchableOpacity>
+          ),
+        })}
       />
       <Stack.Screen
-        name="Settings"
+        name="SettingsScreen"
         component={SettingsScreen}
         options={{ title: "Settings" }}
       />
@@ -43,36 +113,43 @@ const ProfileStack = () => {
 const MainTabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          switch (route.name) {
-            case "Home":
-              iconName = focused ? "home" : "home-outline";
-              break;
-            case "Profile":
-              iconName = focused ? "account" : "account-outline";
-              break;
-            case "Messages":
-              iconName = focused ? "message-text" : "message-text-outline";
-              break;
-            default:
-              iconName = focused ? "alert-circle" : "alert-circle-outline";
-          }
-          return (
-            <MaterialCommunityIcons name={iconName} size={size} color={color} />
-          );
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: "tomato",
+      screenOptions={{
+        tabBarStyle: { backgroundColor: "#143D59" },
+        tabBarActiveTintColor: "#F4B41A",
         inactiveTintColor: "gray",
+        tabStyle: { justifyContent: "center", alignItems: "center" },
       }}
     >
-      <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Profile" component={ProfileStack} />
-      <Tab.Screen name="Messages" component={MessagesScreen} />
+      <Tab.Screen
+        name="Messages"
+        component={MessageStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="mail-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Hometab"
+        component={HomeStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

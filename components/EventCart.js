@@ -9,18 +9,20 @@ const EventCard = ({ date, location, sport, user }) => {
         <Text style={styles.date}>{date}</Text>
         <Text style={styles.location}>{location}</Text>
       </View>
+
       <View style={styles.sportContainer}>
         <Text style={styles.sport}>{sport}</Text>
       </View>
+
       <View style={styles.userContainer}>
         <Avatar
           rounded
           source={{
-            uri: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+            uri: "https://ui-avatars.com/api/?background=0D8ABC&color=fff",
           }}
         />
         <Text style={styles.userName}>{user.name}</Text>
-        <Text style={styles.userPoints}>{user.points} pts</Text>
+        <Text style={styles.userPoints}>{user.points} points</Text>
       </View>
     </View>
   );
@@ -28,18 +30,11 @@ const EventCard = ({ date, location, sport, user }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    margin: 10,
-    padding: 10,
+    backgroundColor: "#F4B41A",
+    borderRadius: 8,
+    padding: 20,
+    elevation: 4,
+    marginBottom: 20,
   },
   dateLocationContainer: {
     flexDirection: "row",
@@ -48,32 +43,37 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#143D59",
   },
   location: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#143D59",
   },
   sportContainer: {
-    marginVertical: 10,
+    marginTop: 10,
   },
   sport: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "bold",
+    color: "#143D59",
   },
   userContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 10,
   },
   userName: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#143D59",
     marginLeft: 10,
   },
   userPoints: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#143D59",
     marginLeft: 10,
-    color: "gray",
   },
 });
 

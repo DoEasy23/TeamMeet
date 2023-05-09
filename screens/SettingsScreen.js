@@ -1,92 +1,100 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Keyboard,
+} from "react-native";
 
 const SettingsScreen = () => {
-    const [birthdate, setBirthdate] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [phone, setPhone] = useState('');
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [location, setLocation] = useState("");
 
-    const handleSave = () => {
-        // burada değişiklikleri kaydedin
+  const handleSave = () => {
+    // Burada save işlemini yapabilirsiniz, örneğin backend'e post request atabilirsiniz
+    console.log(`name: ${name}, age: ${age}, location: ${location}`);
+    Keyboard.dismiss();
+  };
+
+  const handleAgeChange = (text) => {
+    // Sadece sayısal değerleri kabul etmek için regex kullanarak kontrol yapılıyor
+    if (/^\d*$/.test(text)) {
+      setAge(text);
     }
+  };
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.heading}>Settings</Text>
-
-            <Text style={styles.label}>Birthdate:</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your birthdate"
-                value={birthdate}
-                onChangeText={setBirthdate}
-            />
-
-            <Text style={styles.label}>Email:</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your email"
-                value={email}
-                onChangeText={setEmail}
-            />
-
-            <Text style={styles.label}>Password:</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your password"
-                secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
-            />
-
-            <Text style={styles.label}>Phone:</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter your phone number"
-                value={phone}
-                onChangeText={setPhone}
-            />
-
-            <TouchableOpacity onPress={handleSave} style={styles.button}>
-                <Text style={styles.buttonText}>Save Changes</Text>
-            </TouchableOpacity>
-        </View>
-    );
-}
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Settings</Text>
+      <Text style={styles.label}>Name</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your name"
+        placeholderTextColor="#143D59"
+        onChangeText={(text) => setName(text)}
+      />
+      <Text style={styles.label}>Age</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your age"
+        placeholderTextColor="#143D59"
+        onChangeText={handleAgeChange}
+        keyboardType="numeric"
+        value={age}
+      />
+      <Text style={styles.label}>Location</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your location"
+        placeholderTextColor="#143D59"
+        onChangeText={(text) => setLocation(text)}
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSave}>
+        <Text style={styles.buttonText}>Save</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20
-    },
-    heading: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20
-    },
-    label: {
-        fontSize: 16,
-        marginBottom: 5
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 20
-    },
-    button: {
-        backgroundColor: '#007bff',
-        padding: 10,
-        borderRadius: 5
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    }
+  container: {
+    backgroundColor: "#143D59",
+    flex: 1,
+    padding: 20,
+  },
+  heading: {
+    fontSize: 36,
+    fontWeight: "bold",
+    color: "#F4B41A",
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#F4B41A",
+    marginBottom: 10,
+  },
+  input: {
+    backgroundColor: "#F4B41A",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 20,
+    color: "#143D59",
+  },
+  button: {
+    backgroundColor: "#F4B41A",
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "#143D59",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
 
 export default SettingsScreen;
