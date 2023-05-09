@@ -9,10 +9,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import MessagesScreen from "../screens/MessagesScreen";
 import LoginScreen from "../screens/LoginScreen";
-<<<<<<< Updated upstream
 import SignupScreen from "../screens/SignupScreen";
-=======
->>>>>>> Stashed changes
 
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -22,9 +19,6 @@ const Tab = createBottomTabNavigator();
 
 const HomeStack = () => {
   return (
-<<<<<<< Updated upstream
-    <Stack.Navigator>
-=======
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
@@ -33,21 +27,17 @@ const HomeStack = () => {
         headerTintColor: "#F4B41A",
       }}
     >
->>>>>>> Stashed changes
       <Stack.Screen
         name="Login"
         component={LoginScreen}
         options={{ title: "Welcome" }}
       />
       <Stack.Screen
-<<<<<<< Updated upstream
         name="Signup"
         component={SignupScreen}
         options={{ title: "Signup" }}
       />
       <Stack.Screen
-=======
->>>>>>> Stashed changes
         name="Home"
         component={HomeScreen}
         options={{ title: "Home" }}
@@ -61,8 +51,6 @@ const HomeStack = () => {
       />
     </Stack.Navigator>
   );
-<<<<<<< Updated upstream
-=======
 };
 
 const MessageStack = () => {
@@ -82,14 +70,10 @@ const MessageStack = () => {
       />
     </Stack.Navigator>
   );
->>>>>>> Stashed changes
 };
 
 const ProfileStack = () => {
   return (
-<<<<<<< Updated upstream
-    <Stack.Navigator>
-=======
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
@@ -98,7 +82,6 @@ const ProfileStack = () => {
         headerTintColor: "#F4B41A",
       }}
     >
->>>>>>> Stashed changes
       <Stack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
@@ -109,11 +92,7 @@ const ProfileStack = () => {
               style={{ marginRight: 10 }}
               onPress={() => navigation.navigate("SettingsScreen")}
             >
-<<<<<<< Updated upstream
-              <MaterialIcons name="settings" size={24} color="black" />
-=======
               <MaterialIcons name="settings" size={24} color="#F4B41A" />
->>>>>>> Stashed changes
             </TouchableOpacity>
           ),
         })}
@@ -131,27 +110,17 @@ const MainTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-<<<<<<< Updated upstream
-        tabBarActiveTintColor: "#e91e63",
-        inactiveTintColor: "gray",
-=======
         tabBarStyle: { backgroundColor: "#143D59" },
         tabBarActiveTintColor: "#F4B41A",
         inactiveTintColor: "gray",
         tabStyle: { justifyContent: "center", alignItems: "center" },
->>>>>>> Stashed changes
       }}
     >
       <Tab.Screen
         name="Messages"
-<<<<<<< Updated upstream
-        component={MessagesScreen}
-        options={{
-=======
         component={MessageStack}
         options={{
           headerShown: false,
->>>>>>> Stashed changes
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="mail-outline" size={size} color={color} />
           ),

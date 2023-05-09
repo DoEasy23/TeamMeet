@@ -59,7 +59,29 @@ const EventScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+  },
+
+  eventCart: {
+    marginBottom: 20,
+  },
+
+  eventCartHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+
+  eventCartTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+
+  eventCartDate: {
+    fontSize: 14,
+    color: "#666",
   },
 });
 
