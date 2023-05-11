@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -6,43 +7,52 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // burada login işlemini yapabilirsiniz, örneğin backend'e post request atabilirsiniz
-    console.log(`email: ${email}, password: ${password}`);
-    navigation.navigate("Home");
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("http://192.168.1.185:3000/api/auth/login", {
+        email,
+        password,
+      });
+      const token = response.data.token;
+      await AsyncStorage.setItem("token", token); // save token to local storage
+      console.log(response.data); // print response data from your backend
+      navigation.navigate("Home");
+    } catch (error) {
+      console.error(error);
+    }
   };
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#143D59"
-        onChangeText={(text) => setEmail(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#143D59"
-        secureTextEntry
-        onChangeText={(text) => setPassword(text)}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.link}
-        onPress={() => navigation.navigate("Signup")}
-      >
-        <Text style={styles.signUpText}>Don't have an account? Sign up</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#143D59"
+            onChangeText={(text) => setEmail(text)}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#143D59"
+            secureTextEntry
+            onChangeText={(text) => setPassword(text)}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("Signup")}
+        >
+          <Text style={styles.signUpText}>Don't have an account? Sign up</Text>
+        </TouchableOpacity>
+      </View>
   );
 };
 

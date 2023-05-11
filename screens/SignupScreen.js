@@ -5,87 +5,153 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from "react-native";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from 'axios';
 
 const SignupScreen = ({ navigation }) => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [location, setLocation] = useState("");
+  const [birthday, setBirthday] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleSignup = () => {
-    // burada signup işlemini yapabilirsiniz, örneğin backend'e post request atabilirsiniz
-    console.log(`email: ${email}, password: ${password}`);
+  const handleSignup = async () => {
+    try {
+      const response = await axios.post('http://192.168.1.185:3000/api/auth/signup', {
+        name,
+        email,
+        password,
+        phone,
+        location,
+        birthday,
+      });
+      console.log(response.data);
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || birthday;
+    setShowDatePicker(Platform.OS === 'ios');
+    setBirthday(currentDate);
+  };
+
+  const showMode = () => {
+    setShowDatePicker(true);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#143D59"
-        onChangeText={(text) => setEmail(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#143D59"
-        secureTextEntry
-        onChangeText={(text) => setPassword(text)}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSignup}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.link}
-        onPress={() => navigation.navigate("Login")}
-      >
-        <Text style={styles.loginText}>Already have an account? Login</Text>
-      </TouchableOpacity>
-    </View>
-  );
+      <View style={styles.container}>
+        <Text style={styles.title}>Sign Up</Text>
+        <TextInput
+            style={styles.input}
+            placeholder="Name"
+            placeholderTextColor="#143D59"
+            onChangeText={(text) => setName(text)}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#143D59"
+            onChangeText={(text) => setEmail(text)}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#143D59"
+            secureTextEntry
+            onChangeText={(text) => setPassword(text)}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Phone"
+            placeholderTextColor="#143D59"
+            onChangeText={(text) => setPhone(text)}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Location"
+            placeholderTextColor="#143D59"
+            onChangeText={(text) => setLocation(text)}
+        />
+        <TouchableOpacity style={styles.dateButton} onPress
+            ={showMode}>
+            <Text style={styles.buttonText}>Select Birthday</Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+            <DateTimePicker
+                testID="dateTimePicker"
+                value={birthday}
+                mode={'date'}
+                is24Hour={true}
+                display="default"
+                onChange={handleDateChange}
+            />
+        )}
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("Login")}
+        >
+            <Text style={styles.signUpText}>Already have an account? Login</Text>
+        </TouchableOpacity>
+        </View>
+    );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#143D59",
-    justifyContent: "center",
+    backgroundColor: "#fff",
     alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: "bold",
-    color: "#F4B41A",
     marginBottom: 20,
   },
   input: {
-    backgroundColor: "#fff",
-    width: "80%",
-    paddingVertical: 15,
+    height: 50,
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#143D59",
+    borderRadius: 10,
     paddingHorizontal: 10,
-    borderRadius: 8,
     marginBottom: 20,
-    color: "#143D59",
+  },
+  dateButton: {
+    backgroundColor: "#143D59",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: "#F4B41A",
-    width: "80%",
-    paddingVertical: 15,
-    borderRadius: 8,
+    backgroundColor: "#143D59",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+    width: "100%",
+    alignItems: "center",
   },
   buttonText: {
-    color: "#143D59",
-    textAlign: "center",
-    fontSize: 18,
+    color: "#fff",
     fontWeight: "bold",
+    fontSize: 16,
   },
   link: {
     marginTop: 20,
   },
-  loginText: {
-    color: "#fff",
-    fontSize: 16,
+  signUpText: {
+    color: "#143D59",
   },
 });
-
 export default SignupScreen;
