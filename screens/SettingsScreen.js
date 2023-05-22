@@ -1,100 +1,143 @@
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Keyboard,
+    View,
+    Text,
+    TextInput,
+    StyleSheet,
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    Platform,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SettingsScreen = () => {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [location, setLocation] = useState("");
+    const [name, setName] = useState("");
+    const [location, setLocation] = useState("");
+    const [bio, setBio] = useState("");
+    const [sports, setSports] = useState("");
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
 
-  const handleSave = () => {
-    // Burada save işlemini yapabilirsiniz, örneğin backend'e post request atabilirsiniz
-    console.log(`name: ${name}, age: ${age}, location: ${location}`);
-    Keyboard.dismiss();
-  };
+    const token = AsyncStorage.getItem("token");
 
-  const handleAgeChange = (text) => {
-    // Sadece sayısal değerleri kabul etmek için regex kullanarak kontrol yapılıyor
-    if (/^\d*$/.test(text)) {
-      setAge(text);
-    }
-  };
+    const handleSubmit = async () => {
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Settings</Text>
-      <Text style={styles.label}>Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your name"
-        placeholderTextColor="#143D59"
-        onChangeText={(text) => setName(text)}
-      />
-      <Text style={styles.label}>Age</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your age"
-        placeholderTextColor="#143D59"
-        onChangeText={handleAgeChange}
-        keyboardType="numeric"
-        value={age}
-      />
-      <Text style={styles.label}>Location</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your location"
-        placeholderTextColor="#143D59"
-        onChangeText={(text) => setLocation(text)}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSave}>
-        <Text style={styles.buttonText}>Save</Text>
-      </TouchableOpacity>
-    </View>
-  );
+        try {
+            const response = await axios.put(
+                "http://192.168.1.185:3000/api/auth/updateProfile",
+                {
+                    name,
+                    location,
+                    bio,
+                    sports,
+                },
+                {
+                    headers: { Authorization: token },
+                }
+            );
+            setSuccess(response.data.message);
+        } catch (error) {
+            setError(error.response.data.error);
+        }
+        setLoading(false);
+    };
+
+    return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+        >
+            <View style={styles.formContainer}>
+                <Text style={styles.label}>Name</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your name"
+                    value={name}
+                    onChangeText={(text) => setName(text)}
+                />
+                <Text style={styles.label}>Location</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your location"
+                    value={location}
+                    onChangeText={(text) => setLocation(text)}
+                />
+                <Text style={styles.label}>Bio</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your bio"
+                    value={bio}
+                    onChangeText={(text) => setBio(text)}
+                />
+                <Text style={styles.label}>Sports</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter your sports"
+                    value={sports}
+                    onChangeText={(text) => setSports(text)}
+                />
+                {error && <Text style={styles.error}>{error}</Text>}
+                {success && <Text style={styles.success}>{success}</Text>}
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleSubmit}
+                    disabled={loading}
+                >
+                    <Text style={styles.buttonText}>
+                        {loading ? "Loading..." : "Update Profile"}
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.accountButton}
+                    onPress={() => navigation.navigate("AccountSettingsScreen")}
+                >
+                    <Text style={styles.accountButtonText}>Account Settings</Text>
+                </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
+    );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#143D59",
-    flex: 1,
-    padding: 20,
-  },
-  heading: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: "#F4B41A",
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#F4B41A",
-    marginBottom: 10,
-  },
-  input: {
-    backgroundColor: "#F4B41A",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 20,
-    color: "#143D59",
-  },
-  button: {
-    backgroundColor: "#F4B41A",
-    borderRadius: 8,
-    padding: 10,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: "#143D59",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});
+    container: {
+        flex: 1,
+        backgroundColor: "#FFFFFF",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: 20,
+    },
+    heading: {
+        fontSize: 30,
 
+        color: "#143D59",
+        fontWeight: "bold",
+        marginBottom: 20,
+    },
+    form: {
+        width: "100%",
+    },
+    input: {
+        backgroundColor: "#F2F2F2",
+        padding: 15,
+        marginBottom: 10,
+        borderRadius: 5,
+    },
+    button: {
+        backgroundColor: "#143D59",
+        padding: 15,
+        borderRadius: 5,
+        marginTop: 10,
+    },
+    buttonText: {
+        color: "#FFFFFF",
+        fontSize: 16,
+        textAlign: "center",
+    },
+});
 export default SettingsScreen;

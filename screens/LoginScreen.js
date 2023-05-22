@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {
   StyleSheet,
@@ -13,6 +13,41 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    // Add a request interceptor to send the token with each request
+    const requestInterceptor = axios.interceptors.request.use(
+        async (config) => {
+          const token = await AsyncStorage.getItem("token");
+          if (token) {
+            config.headers.Authorization = `${token}`;
+          }
+          return config;
+        },
+        (error) => {
+          return Promise.reject(error);
+        }
+    );
+
+    // Add a response interceptor to update the token if it's returned in the response
+    const responseInterceptor = axios.interceptors.response.use(
+        async (response) => {
+          const newToken = response.headers.authorization;
+          if (newToken) {
+            await AsyncStorage.setItem("token", newToken.replace("", ""));
+          }
+          return response;
+        },
+        (error) => {
+          return Promise.reject(error);
+        }
+    );
+
+    // Remove the interceptors when the component unmounts
+    return () => {
+      axios.interceptors.request.eject(requestInterceptor);
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, []);
   const handleLogin = async () => {
     try {
       const response = await axios.post("http://192.168.1.185:3000/api/auth/login", {

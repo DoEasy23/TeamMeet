@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -12,8 +12,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const ProfileScreen = () => {
-  const navigation = useNavigation();
-  const [user, setUser] = useState(null);
+    const navigation = useNavigation();
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -31,11 +31,30 @@ const ProfileScreen = () => {
         fetchUser();
     }, []);
 
-  if (!user) {
-    return null; // Eğer kullanıcı verisi henüz yüklenmediyse null döndürerek yüklenmesini bekleyebiliriz.
-  }
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchUser();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
-  return (
+    const fetchUser = async () => {
+        const token = await AsyncStorage.getItem("token"); // retrieve token from local storage
+        console.log(token)
+        try {
+            const response = await axios.get("http://192.168.1.185:3000/api/auth/me", {
+                headers: { Authorization: token}, // pass token in headers
+            });
+            setUser(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    if (!user) {
+        return null; // Eğer kullanıcı verisi henüz yüklenmediyse null döndürerek yüklenmesini bekleyebiliriz.
+    }
+    return (
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <View style={styles.userInfo}>

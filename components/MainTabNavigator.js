@@ -12,6 +12,7 @@ import SignupScreen from "../screens/SignupScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import EventDetailScreen from "../screens/EventDetailScreen";
+import AccountSettingsScreen from "../screens/AccountSettingsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -106,7 +107,13 @@ const ProfileStack = () => {
         component={SettingsScreen}
         options={{ title: "Settings" }}
       />
+<Stack.Screen
+        name="AccountSettingsScreen"
+        component={AccountSettingsScreen}
+        options={{ title: "Account Settings" }}
+        />
     </Stack.Navigator>
+
   );
 };
 
@@ -120,16 +127,6 @@ const MainTabNavigator = () => {
         tabStyle: { justifyContent: "center", alignItems: "center" },
       }}
     >
-      <Tab.Screen
-        name="Messages"
-        component={MessageStack}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="mail-outline" size={size} color={color} />
-          ),
-        }}
-      />
       <Tab.Screen
         name="Hometab"
         component={HomeStack}
