@@ -31,7 +31,7 @@ const SettingsScreen = () => {
 
         try {
             const response = await axios.put(
-                "http://192.168.1.185:3000/api/auth/updateProfile",
+                "http://192.168.1.200:3000/api/auth/updateProfile",
                 {
                     name,
                     location,
@@ -47,6 +47,11 @@ const SettingsScreen = () => {
             setError(error.response.data.error);
         }
         setLoading(false);
+    };
+
+    const handleLogout = async () => {
+        await AsyncStorage.removeItem("token");
+        navigation.navigate("Login");
     };
 
     return (
@@ -100,10 +105,14 @@ const SettingsScreen = () => {
                 >
                     <Text style={styles.accountButtonText}>Account Settings</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                    <Text style={styles.logoutButtonText}>Logout</Text>
+                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -114,7 +123,6 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 30,
-
         color: "#143D59",
         fontWeight: "bold",
         marginBottom: 20,
@@ -139,5 +147,22 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlign: "center",
     },
+    accountButton: {
+        marginTop: 10,
+    },
+    accountButtonText: {
+        color: "#143D59",
+        fontSize: 16,
+        textAlign: "center",
+    },
+    logoutButton: {
+        marginTop: 20,
+    },
+    logoutButtonText: {
+        color: "red",
+        fontSize: 16,
+        textAlign: "center",
+    },
 });
+
 export default SettingsScreen;

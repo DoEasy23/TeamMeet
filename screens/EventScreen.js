@@ -1,77 +1,53 @@
-import React from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from "react-native";
 import EventCart from "../components/EventCart";
 import { useNavigation } from "@react-navigation/native";
-
-const eventsData = [
-  {
-    id: 1,
-    date: "March 28, 2023",
-    location: "New York",
-    sport: "Basketball",
-    user: { name: "John Doe", points: 25 },
-  },
-  {
-    id: 2,
-    date: "April 2, 2023",
-    location: "London",
-    sport: "Tennis",
-    user: { name: "Jane Smith", points: 18 },
-  },
-  {
-    id: 3,
-    date: "April 8, 2023",
-    location: "Paris",
-    sport: "Football",
-    user: { name: "Bob Johnson", points: 31 },
-  },
-  {
-    id: 4,
-    date: "April 15, 2023",
-    location: "Los Angeles",
-    sport: "Basketball",
-    user: { name: "Alice Williams", points: 12 },
-  },
-  {
-    id: 5,
-    date: "April 23, 2023",
-    location: "Toronto",
-    sport: "Tennis",
-    user: { name: "Tom Brown", points: 16 },
-  },
-];
+import axios from "axios";
 
 const EventScreen = () => {
   const navigation = useNavigation();
+  const [eventsData, setEventsData] = useState([]);
+
+  useEffect(() => {
+    const fetchEventData = async () => {
+      try {
+        const response = await axios.get("http://192.168.1.200:3000/api/events");
+        setEventsData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEventData();
+  }, []);
 
   const handleEventPress = (eventId) => {
     navigation.navigate("Event Detail", { eventId: eventId, eventsData });
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {eventsData.map((event) => (
-        <TouchableOpacity
-          key={event.id}
-          onPress={() => handleEventPress(event.id)}
-        >
-          <EventCart
-            date={event.date}
-            location={event.location}
-            sport={event.sport}
-            user={event.user}
-          />
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
+      <ScrollView contentContainerStyle={styles.container}>
+        {eventsData.map((event, index) => {
+          const createdByUser = event.createdBy && event.createdBy.user;
+          const user = createdByUser ? { id: createdByUser.id, name: createdByUser.name } : null;
+
+          return (
+              <TouchableOpacity key={index} onPress={() => handleEventPress(event.id)}>
+                <EventCart
+                    eventid={event.id}
+                    date={event.date}
+                    location={event.location}
+                    sport={event.sport}
+                    user={user.name}
+                />
+              </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#143D59",

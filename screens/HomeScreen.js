@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
   TextInput,
   Text,
   TouchableOpacity,
+  BackHandler,
 } from "react-native";
-
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const sports = [
   { label: "Football", value: "football" },
@@ -22,42 +23,69 @@ const HomeScreen = () => {
   const [location, setLocation] = useState("");
   const navigation = useNavigation();
 
+  useEffect(() => {
+    //check if user is logged in
+    const checkLoggedIn = async () => {
+        const token = await AsyncStorage.getItem("token");
+        if (!token) {
+            navigation.navigate("Login");
+        }
+    };
+    checkLoggedIn();
+
+
+    const backAction = () => {
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+    );
+    return () => backHandler.remove();
+  }, []);
+
   const handleSearch = () => {
     if (sport && location) {
-      // Navigate to EventScreen with sport and location params
       navigation.navigate("EventScreen", { sport, location });
     } else {
       alert("Please select a sport and enter a location");
     }
   };
 
+  const handleCreateEvent = () => {
+    navigation.navigate("CreateEventScreen");
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Find Events</Text>
-      <View style={styles.dropdownContainer}>
-        <DropDownPicker
-          open={open}
-          value={sport}
-          items={sports}
-          setOpen={setOpen}
-          setValue={setSport}
-          style={styles.dropdown}
-          textStyle={styles.dropdownText}
-          arrowColor="#143D59"
-          containerStyle={styles.dropdownContainer}
-          dropDownContainerStyle={styles.dropdownDropContainer}
+      <View style={styles.container}>
+        <Text style={styles.title}>Find Events</Text>
+        <View style={styles.dropdownContainer}>
+          <DropDownPicker
+              open={open}
+              value={sport}
+              items={sports}
+              setOpen={setOpen}
+              setValue={setSport}
+              style={styles.dropdown}
+              textStyle={styles.dropdownText}
+              arrowColor="#143D59"
+              containerStyle={styles.dropdownContainer}
+              dropDownContainerStyle={styles.dropdownDropContainer}
+          />
+        </View>
+        <TextInput
+            style={styles.input}
+            placeholder="Enter a location"
+            placeholderTextColor="#143D59"
+            onChangeText={(text) => setLocation(text)}
         />
+        <TouchableOpacity style={styles.button} onPress={handleSearch}>
+          <Text style={styles.buttonTitle}>Search</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.createEventButton} onPress={handleCreateEvent}>
+          <Text style={styles.createEventButtonText}>Create Event</Text>
+        </TouchableOpacity>
       </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter a location"
-        placeholderTextColor="#143D59"
-        onChangeText={(text) => setLocation(text)}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSearch}>
-        <Text style={styles.buttonTitle}>Search</Text>
-      </TouchableOpacity>
-    </View>
   );
 };
 
@@ -109,6 +137,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#143D59",
+    textAlign: "center",
+  },
+  createEventButton: {
+    marginTop: 10,
+    backgroundColor: "#143D59",
+    width: "100%",
+    paddingVertical: 15,
+    borderRadius: 8,
+  },
+  createEventButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#F4B41A",
     textAlign: "center",
   },
 });

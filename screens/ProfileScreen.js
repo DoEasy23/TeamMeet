@@ -17,17 +17,24 @@ const ProfileScreen = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const token = await AsyncStorage.getItem("token"); // retrieve token from local storage
-            console.log(token)
-            try {
-                const response = await axios.get("http://192.168.1.185:3000/api/auth/me", {
-                    headers: { Authorization: token}, // pass token in headers
-                });
-                setUser(response.data);
-            } catch (error) {
-                console.error(error);
+            const token = await AsyncStorage.getItem("token");
+            if (token) {
+                try {
+                    const response = await axios.get(
+                        "http://192.168.1.200:3000/api/auth/me",
+                        {
+                            headers: { Authorization: token },
+                        }
+                    );
+                    setUser(response.data);
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                navigation.navigate("Login");
             }
         };
+
         fetchUser();
     }, []);
 
@@ -42,7 +49,7 @@ const ProfileScreen = () => {
         const token = await AsyncStorage.getItem("token"); // retrieve token from local storage
         console.log(token)
         try {
-            const response = await axios.get("http://192.168.1.185:3000/api/auth/me", {
+            const response = await axios.get("http://192.168.1.200:3000/api/auth/me", {
                 headers: { Authorization: token}, // pass token in headers
             });
             setUser(response.data);

@@ -5,35 +5,50 @@ import { Avatar } from "react-native-elements";
 const EventDetailScreen = ({ route }) => {
   const { eventId, eventsData } = route.params;
 
+  // Find the specific event using the eventId
   const event = eventsData.find((item) => item.id === eventId);
 
+  // Check if event exists before accessing properties
+  if (!event) {
+    return (
+        <View style={styles.container}>
+          <Text style={styles.errorText}>Event not found</Text>
+        </View>
+    );
+  }
+
+  // Check if event.user exists before accessing name property
+  const userName = event.user?.name || "Unknown User";
+
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>{event.sport}</Text>
-        <View style={styles.details}>
-          <Text style={styles.label}>User:</Text>
-          <Text style={styles.text}>{event.user.name}</Text>
-          <Avatar
-            style={styles.avatar}
-            rounded
-            source={{
-              uri: "https://ui-avatars.com/api/?background=0D8ABC&color=fff",
-            }}
-          />
-        </View>
-        <View style={styles.details}>
-          <Text style={styles.label}>Date:</Text>
-          <Text style={styles.text}>{event.date}</Text>
-        </View>
-        <View style={styles.details}>
-          <Text style={styles.label}>Location:</Text>
-          <Text style={styles.text}>{event.location}</Text>
+      <View style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.title}>{event.sport}</Text>
+          <View style={styles.details}>
+            <Text style={styles.label}>User:</Text>
+            <Text style={styles.text}>{userName}</Text>
+            <Avatar
+                style={styles.avatar}
+                rounded
+                source={{
+                  uri: "https://ui-avatars.com/api/?background=0D8ABC&color=fff",
+                }}
+            />
+          </View>
+          <View style={styles.details}>
+            <Text style={styles.label}>Date:</Text>
+            <Text style={styles.text}>{event.date}</Text>
+          </View>
+          <View style={styles.details}>
+            <Text style={styles.label}>Location:</Text>
+            <Text style={styles.text}>{event.location}</Text>
+          </View>
         </View>
       </View>
-    </View>
   );
 };
+
+// ...remaining styles and export statement
 
 const styles = StyleSheet.create({
   container: {
@@ -58,7 +73,6 @@ const styles = StyleSheet.create({
   details: {
     flexDirection: "row",
     alignItems: "center",
-
     marginBottom: 5,
   },
   label: {
@@ -77,6 +91,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginRight: 5,
     marginLeft: "auto",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "red",
   },
 });
 
