@@ -4,8 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {USER_API} from "@env";
-
+import { USER_API } from "@env";
 
 const EventDetailScreen = ({ route }) => {
   const { eventId, eventsData } = route.params;
@@ -30,12 +29,9 @@ const EventDetailScreen = ({ route }) => {
     const fetchCurrentUserId = async () => {
       const token = await AsyncStorage.getItem("token");
       try {
-        const response = await axios.get(
-          "http://192.168.1.5:3000/api/auth/me",
-          {
-            headers: { Authorization: token },
-          }
-        );
+        const response = await axios.get(`${USER_API}:3000/api/auth/me`, {
+          headers: { Authorization: token },
+        });
         setCurrentUserId(response.data._id);
       } catch (error) {
         console.error(error);
@@ -138,7 +134,7 @@ const EventDetailScreen = ({ route }) => {
               marginLeft: "auto",
             }}
             onPress={() =>
-              fetch("http://192.168.1.5:3000/api/join", {
+              fetch(`${USER_API}/api/join`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
