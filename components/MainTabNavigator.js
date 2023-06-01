@@ -14,7 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import EventDetailScreen from "../screens/EventDetailScreen";
 import AccountSettingsScreen from "../screens/AccountSettingsScreen";
 import CreateEventScreen from "../screens/CreateEventScreen";
-
+import MyEventsScreen from "../screens/MyEventsScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -58,6 +58,7 @@ const HomeStack = () => {
         options={{ title: "Event Detail" }}
       />
         <Stack.Screen name={"CreateEventScreen"} component={CreateEventScreen} options={{title: "Create Event"}}/>
+        <Stack.Screen name={"MyEventsScreen"} component={MyEventsScreen} options={{title: "My Events"}}/>
     </Stack.Navigator>
   );
 };

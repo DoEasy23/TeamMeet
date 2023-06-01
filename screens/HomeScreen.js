@@ -55,6 +55,10 @@ const HomeScreen = () => {
   const handleCreateEvent = () => {
     navigation.navigate("CreateEventScreen");
   };
+  const handleMyEvents = () => {
+    navigation.navigate("MyEventsScreen");
+    };
+
 
   return (
       <View style={styles.container}>
@@ -85,8 +89,11 @@ const HomeScreen = () => {
         <TouchableOpacity style={styles.createEventButton} onPress={handleCreateEvent}>
           <Text style={styles.createEventButtonText}>Create Event</Text>
         </TouchableOpacity>
+      <TouchableOpacity style={styles.MyEventsButton} onPress={handleMyEvents}>
+            <Text style={styles.MyEventsButtonText}>My Events</Text>
+        </TouchableOpacity>
       </View>
-  );
+);
 };
 
 const styles = StyleSheet.create({
@@ -152,6 +159,21 @@ const styles = StyleSheet.create({
     color: "#F4B41A",
     textAlign: "center",
   },
+    MyEventsButton: {
+        marginTop: 10,
+        backgroundColor: "#143D59",
+        width: "100%",
+        paddingVertical: 15,
+        borderRadius: 8,
+    },
+    MyEventsButtonText: {
+        fontSize: 18,
+        fontWeight: "bold",
+
+        color: "#F4B41A",
+        textAlign: "center",
+
+    }
 });
 
 export default HomeScreen;
