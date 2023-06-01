@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import EventCart from "../components/EventCart";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
-const EventScreen = () => {
+const EventScreen = ({ route }) => {
+  const { sport, location } = route.params;
+  console.log(sport, location);
   const navigation = useNavigation();
   const [eventsData, setEventsData] = useState([]);
 
   useEffect(() => {
     const fetchEventData = async () => {
       try {
-        const response = await axios.get("http://192.168.1.200:3000/api/events");
+        const response = await axios.get("http://192.168.1.5:3000/api/events");
         setEventsData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -27,32 +35,40 @@ const EventScreen = () => {
   };
 
   return (
-      <ScrollView contentContainerStyle={styles.container}>
-        {eventsData.map((event, index) => {
-          const createdByUser = event.createdBy && event.createdBy.user;
-          const user = createdByUser ? { id: createdByUser.id, name: createdByUser.name } : null;
-
+    <ScrollView contentContainerStyle={styles.container}>
+      {eventsData.map((event, index) => {
+        if (sport === event.sport && location === event.location) {
           return (
-              <TouchableOpacity key={index} onPress={() => handleEventPress(event.id)}>
-                <EventCart
-                    eventid={event.id}
-                    date={event.date}
-                    location={event.location}
-                    sport={event.sport}
-                    user={user.name}
-                />
-              </TouchableOpacity>
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleEventPress(event._id)}
+            >
+              <EventCart event={event} />
+            </TouchableOpacity>
           );
-        })}
-      </ScrollView>
+        }
+        return (
+          <View key={index}>
+            <Text style={styles.errorText}>No events found</Text>
+          </View>
+        );
+      })}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
+    height: "100%",
     backgroundColor: "#143D59",
     alignItems: "center",
     justifyContent: "center",
+  },
+  errorText: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
 
