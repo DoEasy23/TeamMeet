@@ -16,7 +16,7 @@ const ProfileScreen = () => {
       if (token) {
         try {
           const response = await axios.get(
-            "http://192.168.1.200:5/api/auth/me",
+            "http://192.168.1.5:3000/api/auth/me",
             {
               headers: { Authorization: token },
             }

@@ -36,23 +36,28 @@ const EventScreen = ({ route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {eventsData.map((event, index) => {
-        if (sport === event.sport && location === event.location) {
-          return (
+      {eventsData.find(
+        (event) =>
+          event.sport === sport &&
+          event.location.toUpperCase() === location.toUpperCase()
+      ) ? (
+        eventsData
+          .filter(
+            (event) =>
+              event.sport === sport &&
+              event.location.toUpperCase() === location.toUpperCase()
+          )
+          .map((event) => (
             <TouchableOpacity
-              key={index}
+              key={event._id}
               onPress={() => handleEventPress(event._id)}
             >
               <EventCart event={event} />
             </TouchableOpacity>
-          );
-        }
-        return (
-          <View key={index}>
-            <Text style={styles.errorText}>No events found</Text>
-          </View>
-        );
-      })}
+          ))
+      ) : (
+        <Text style={styles.errorText}>No event found</Text>
+      )}
     </ScrollView>
   );
 };

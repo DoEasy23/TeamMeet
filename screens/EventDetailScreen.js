@@ -86,7 +86,7 @@ const EventDetailScreen = ({ route }) => {
             source={{
               uri: user.avatar
                 ? user.avatar
-                : "https://ui-avatars.com/api/?background=0D8ABC&color=fff",
+                : "https://www.w3schools.com/howto/img_avatar.png",
             }}
             size="small"
             rounded
@@ -136,9 +136,22 @@ const EventDetailScreen = ({ route }) => {
               marginLeft: "auto",
             }}
             onPress={() =>
-              navigation.navigate("RequestToJoin", {
-                eventId: event._id,
-                eventsData: eventsData,
+              fetch("http://192.168.1.5:3000/api/join", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  eventId: event._id,
+                  userId: currentUserId,
+                }),
+              }).then((res) => {
+                navigation.navigate("Home", {
+                  screen: "Home",
+                  params: {
+                    screen: "Home",
+                  },
+                });
               })
             }
           >
