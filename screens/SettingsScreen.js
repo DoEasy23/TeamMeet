@@ -11,7 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { USER_API } from "@env";
 const SettingsScreen = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
@@ -31,7 +31,7 @@ const SettingsScreen = () => {
 
     try {
       const response = await axios.put(
-        "http://192.168.1.5:3000/api/auth/updateProfile",
+        `${USER_API}/api/auth/updateProfile`,
         {
           name,
           location,

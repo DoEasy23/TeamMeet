@@ -5,7 +5,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import EventCart from "../components/EventCart";
-
+import { USER_API } from "@env";
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
@@ -16,7 +16,7 @@ const ProfileScreen = () => {
       if (token) {
         try {
           const response = await axios.get(
-            "http://192.168.1.5:3000/api/auth/me",
+            `${USER_API}/api/auth/me`,
             {
               headers: { Authorization: token },
             }

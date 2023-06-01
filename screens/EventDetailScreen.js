@@ -4,6 +4,8 @@ import { View, Text, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {USER_API} from "@env";
+
 
 const EventDetailScreen = ({ route }) => {
   const { eventId, eventsData } = route.params;
@@ -17,7 +19,7 @@ const EventDetailScreen = ({ route }) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.1.5:3000/api/auth/${event.createdBy}`
+          `${USER_API}/api/auth/${event.createdBy}`
         );
         setUser(response.data);
       } catch (error) {

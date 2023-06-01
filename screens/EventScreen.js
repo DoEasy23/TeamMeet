@@ -9,6 +9,7 @@ import {
 import EventCart from "../components/EventCart";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import {USER_API} from "@env";
 
 const EventScreen = ({ route }) => {
   const { sport, location } = route.params;
@@ -19,7 +20,7 @@ const EventScreen = ({ route }) => {
   useEffect(() => {
     const fetchEventData = async () => {
       try {
-        const response = await axios.get("http://192.168.1.5:3000/api/events");
+        const response = await axios.get(`${USER_API}/api/events`);
         setEventsData(response.data);
         console.log(response.data);
       } catch (error) {

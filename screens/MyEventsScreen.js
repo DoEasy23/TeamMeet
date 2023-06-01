@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import axios from "axios";
-
+import { USER_API } from "@env";
 const MyEventsScreen = () => {
     const [events, setEvents] = useState([]);
     const [requests, setRequests] = useState([]);
@@ -13,7 +13,7 @@ const MyEventsScreen = () => {
 
     const fetchEvents = async () => {
         try {
-            const response = await axios.get("http://192.168.1.191:3000/api/events");
+            const response = await axios.get(`${USER_API}/api/events`);
             setEvents(response.data);
         } catch (error) {
             console.error(error);
@@ -22,7 +22,7 @@ const MyEventsScreen = () => {
 
     const fetchRequests = async () => {
         try {
-            const response = await axios.get("http://192.168.1.191:3000/api/join");
+            const response = await axios.get(`${USER_API}/api/join`);
             setRequests(response.data);
         } catch (error) {
             console.error(error);

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
-
+import {USER_API} from "@env";
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ const SignupScreen = ({ navigation }) => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.1.5:3000/api/auth/signup",
+        `${USER_API}/api/auth/signup`,
         {
           name,
           email,
