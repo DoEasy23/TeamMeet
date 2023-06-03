@@ -20,7 +20,7 @@ const EventScreen = ({ route }) => {
   useEffect(() => {
     const fetchEventData = async () => {
       try {
-        const response = await axios.get(`${USER_API}/api/events`);
+        const response = await axios.get(`${USER_API.trim()}/api/events`);
         setEventsData(response.data);
         console.log(response.data);
       } catch (error) {

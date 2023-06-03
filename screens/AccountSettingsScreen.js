@@ -35,7 +35,7 @@ const AccountSettingsScreen = () => {
       data.newPassword = newPassword;
     }
     try {
-      await axios.put(`${USER_API}/api/auth/update`, data, {
+      await axios.put(`${USER_API.trim()}/api/auth/update`, data, {
         headers: { Authorization: token },
       });
       alert("Account updated successfully!");

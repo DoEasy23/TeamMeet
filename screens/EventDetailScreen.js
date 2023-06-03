@@ -18,7 +18,7 @@ const EventDetailScreen = ({ route }) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${USER_API}/api/auth/${event.createdBy}`
+          `${USER_API.trim()}/api/auth/${event.createdBy}`
         );
         setUser(response.data);
       } catch (error) {
@@ -29,7 +29,7 @@ const EventDetailScreen = ({ route }) => {
     const fetchCurrentUserId = async () => {
       const token = await AsyncStorage.getItem("token");
       try {
-        const response = await axios.get(`${USER_API}:3000/api/auth/me`, {
+        const response = await axios.get(`${USER_API.trim()}:3000/api/auth/me`, {
           headers: { Authorization: token },
         });
         setCurrentUserId(response.data._id);
@@ -134,7 +134,7 @@ const EventDetailScreen = ({ route }) => {
               marginLeft: "auto",
             }}
             onPress={() =>
-              fetch(`${USER_API}/api/join`, {
+              fetch(`${USER_API.trim()}/api/join`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

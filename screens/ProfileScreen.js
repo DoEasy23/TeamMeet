@@ -15,7 +15,7 @@ const ProfileScreen = () => {
       const token = await AsyncStorage.getItem("token");
       if (token) {
         try {
-          const response = await axios.get(`${USER_API}/api/auth/me`, {
+          const response = await axios.get(`${USER_API.trim()}/api/auth/me`, {
             headers: { Authorization: token },
           });
           setUser(response.data);
@@ -41,7 +41,7 @@ const ProfileScreen = () => {
     const token = await AsyncStorage.getItem("token"); // retrieve token from local storage
     console.log(token);
     try {
-      const response = await axios.get(`${USER_API}/api/auth/me`, {
+      const response = await axios.get(`${USER_API.trim()}/api/auth/me`, {
         headers: { Authorization: token }, // pass token in headers
       });
       setUser(response.data);
@@ -53,6 +53,8 @@ const ProfileScreen = () => {
   if (!user) {
     return null; // Eğer kullanıcı verisi henüz yüklenmediyse null döndürerek yüklenmesini bekleyebiliriz.
   }
+
+  console.log(`${USER_API.trim()}/${user.avatarUrl}`);
 
   return (
     <View style={styles.container}>
@@ -66,7 +68,7 @@ const ProfileScreen = () => {
           style={styles.avatar}
           source={{
             uri: user.avatarUrl
-              ? user.avatarUrl
+              ? `${USER_API.trim()}/${user.avatarUrl.replace("\\", "/")}`
               : "https://www.w3schools.com/howto/img_avatar.png",
           }}
         />

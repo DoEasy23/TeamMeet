@@ -9,11 +9,9 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import {USER_API} from "@env";
+import { USER_API } from "@env";
 
-
-
-const apiUrl = USER_API;
+const apiUrl = USER_API.trim();
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,13 +30,10 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        `${apiUrl}/api/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post(`${apiUrl}/api/auth/login`, {
+        email,
+        password,
+      });
       const token = response.data.token;
       await AsyncStorage.setItem("token", token); // save token to local storage
       console.log(response.data); // print response data from your backend
