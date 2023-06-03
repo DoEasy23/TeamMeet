@@ -2,11 +2,30 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import axios from "axios";
 import { USER_API } from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwtDecode from "jwt-decode";
+
 const MyEventsScreen = () => {
   const [events, setEvents] = useState([]);
   const [requests, setRequests] = useState([]);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const decodedToken = jwtDecode(token);
+        console.log(token);
+        const { id: userId } = decodedToken.user;
+
+        console.log(decodedToken);
+        setUserId(userId);
+        console.log("User ID: ", userId);
+      } catch (error) {
+        console.log("Token çözümlenirken bir hata oluştu", error);
+      }
+    };
+    fetchUserData();
     fetchEvents();
     fetchRequests();
   }, []);
@@ -14,7 +33,12 @@ const MyEventsScreen = () => {
   const fetchEvents = async () => {
     try {
       const response = await axios.get(`${USER_API.trim()}/api/events`);
-      setEvents(response.data);
+      if (response.data) {
+        const filteredEvents = response.data.filter(
+          (event) => event.createdBy === userId
+        );
+        setEvents(filteredEvents);
+      }
     } catch (error) {
       console.error(error);
     }
