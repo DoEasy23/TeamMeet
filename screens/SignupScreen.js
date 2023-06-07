@@ -40,7 +40,7 @@ const SignupScreen = ({ navigation }) => {
       });
 
       const response = await axios.post(
-        `${USER_API.trim()}/api/auth/signup`,
+        `${USER_API}/api/auth/signup`,
         formData,
         {
           headers: {
