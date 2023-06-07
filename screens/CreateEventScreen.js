@@ -32,12 +32,8 @@ const CreateEventScreen = () => {
       try {
         const token = await AsyncStorage.getItem("token");
         const decodedToken = jwtDecode(token);
-        console.log(token);
         const { id: userId } = decodedToken.user;
-
-        console.log(decodedToken);
         setUserId(userId);
-        console.log("User ID: ", userId);
       } catch (error) {
         console.log("Token çözümlenirken bir hata oluştu", error);
       }
@@ -137,19 +133,14 @@ const CreateEventScreen = () => {
           value={sport}
           onChangeText={(text) => setSport(text)}
         />
-
-        <TouchableOpacity style={styles.button} onPress={showDatepicker}>
-          <Text style={styles.buttonText}>Select Date</Text>
-        </TouchableOpacity>
-
-        {showDatePicker && (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display="default"
-            onChange={handleDateChange}
-          />
-        )}
+        <Text style={styles.label}>Date</Text>
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={handleDateChange}
+          style={styles.date}
+        />
 
         <TouchableOpacity
           style={styles.button}
@@ -170,46 +161,52 @@ const CreateEventScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#fff",
     flex: 1,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
     justifyContent: "center",
-    margin: 20,
   },
   formContainer: {
-    width: "100%",
+    marginHorizontal: 30,
   },
   label: {
-    fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 5,
+    fontSize: 15,
+    marginBottom: 10,
+    marginTop: 20,
   },
   input: {
-    backgroundColor: "#F2F2F2",
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 10,
+    fontSize: 18,
+    borderRadius: 6,
+    marginBottom: 15,
   },
   button: {
-    backgroundColor: "#143D59",
-    padding: 15,
-    borderRadius: 5,
-    marginTop: 10,
+    backgroundColor: "#f01d71",
+    paddingVertical: 12,
+    borderRadius: 6,
+    alignItems: "center",
+    marginTop: 20,
   },
   buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    textAlign: "center",
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 18,
   },
   error: {
     color: "red",
-    fontSize: 16,
     marginBottom: 10,
+    marginTop: 10,
+    fontWeight: "bold",
+    fontSize: 15,
   },
   success: {
     color: "green",
-    fontSize: 16,
     marginBottom: 10,
+    marginTop: 10,
+    fontWeight: "bold",
+    fontSize: 15,
   },
 });
 
