@@ -7,6 +7,7 @@ import jwtDecode from "jwt-decode";
 
 const MyEventsScreen = () => {
   const [events, setEvents] = useState([]);
+  const [userEvents, setUserEvents] = useState([]);
   const [requests, setRequests] = useState([]);
   const [userId, setUserId] = useState("");
 
@@ -33,11 +34,12 @@ const MyEventsScreen = () => {
   const fetchEvents = async () => {
     try {
       const response = await axios.get(`${USER_API}/api/events`);
+      setEvents(response.data);
       if (response.data) {
         const filteredEvents = response.data.filter(
           (event) => event.createdBy === userId
         );
-        setEvents(filteredEvents);
+        setUserEvents(filteredEvents);
       }
     } catch (error) {
       console.error(error);
@@ -47,7 +49,23 @@ const MyEventsScreen = () => {
   const fetchRequests = async () => {
     try {
       const response = await axios.get(`${USER_API}/api/join`);
-      setRequests(response.data);
+      if (response.data) {
+        let filteredEvents = [];
+        events.forEach((event) => {
+          response.data.forEach((request) => {
+            if (request.event === event._id) {
+              filteredEvents.push(event);
+            }
+          });
+        });
+        console.log("Filtered Events: ", filteredEvents);
+        console.log("User ID: ", userId);
+        filteredEvents = filteredEvents.filter(
+          (event) => event.createdBy === userId
+        );
+        setRequests(filteredEvents);
+      }
+
     } catch (error) {
       console.error(error);
     }
@@ -58,6 +76,7 @@ const MyEventsScreen = () => {
       <Text style={styles.eventTitle}>{item.title}</Text>
       <Text style={styles.eventDescription}>{item.description}</Text>
       <Text style={styles.eventLocation}>{item.location}</Text>
+      <Text style={styles.eventDate}>{item.date.split("T")[0]}</Text>
     </View>
   );
 
@@ -73,7 +92,7 @@ const MyEventsScreen = () => {
       <Text style={styles.heading}>My Events</Text>
       <Text style={styles.subHeading}>Events:</Text>
       <FlatList
-        data={events}
+        data={userEvents}
         renderItem={renderEventItem}
         keyExtractor={(item) => item._id}
         style={styles.eventList}
@@ -129,6 +148,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
   },
+  eventDate: {
+    fontSize: 14,
+    color: "#666",
+  },
+
   requestList: {
     width: "100%",
     marginTop: 8,

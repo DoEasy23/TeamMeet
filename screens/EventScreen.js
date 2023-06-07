@@ -9,7 +9,7 @@ import {
 import EventCart from "../components/EventCart";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import {USER_API} from "@env";
+import { USER_API } from "@env";
 
 const EventScreen = ({ route }) => {
   const { sport, location } = route.params;
