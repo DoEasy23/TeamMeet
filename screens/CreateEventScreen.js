@@ -139,7 +139,8 @@ const CreateEventScreen = () => {
           mode="date"
           display="default"
           onChange={handleDateChange}
-          style={styles.date}
+          minimumDate={new Date()}
+          themeVariant="dark"
         />
 
         <TouchableOpacity
@@ -161,7 +162,7 @@ const CreateEventScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: "#143D59",
     flex: 1,
     justifyContent: "center",
   },
@@ -169,6 +170,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   label: {
+    color: "#fff",
     fontWeight: "bold",
     fontSize: 15,
     marginBottom: 10,
@@ -177,13 +179,14 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#ddd",
+    backgroundColor: "#fff",
     padding: 10,
     fontSize: 18,
     borderRadius: 6,
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "#f01d71",
+    backgroundColor: "#F4B41A",
     paddingVertical: 12,
     borderRadius: 6,
     alignItems: "center",

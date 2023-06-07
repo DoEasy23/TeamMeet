@@ -104,43 +104,45 @@ const AccountSettingsScreen = () => {
   );
 };
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#143D59",
   },
   form: {
+    marginTop: 100,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 50,
+    marginHorizontal: 30,
   },
   inputContainer: {
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
-    marginVertical: 10,
-    borderColor: "#4a4a4a",
-    borderBottomWidth: 1,
-    width: "100%",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 15,
   },
   input: {
     flex: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    fontSize: 18,
+    marginLeft: 10,
   },
   button: {
-    backgroundColor: "#4a4a4a",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginVertical: 10,
+    backgroundColor: "#F4B41A",
+    paddingVertical: 12,
+    marginTop: 20,
+    borderRadius: 6,
+    alignItems: "center",
     width: "100%",
   },
   buttonText: {
     color: "#fff",
+    fontSize: 18,
     fontWeight: "bold",
-    fontSize: 16,
-    textAlign: "center",
   },
 });
 

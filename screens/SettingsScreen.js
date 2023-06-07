@@ -99,69 +99,90 @@ const SettingsScreen = () => {
             {loading ? "Loading..." : "Update Profile"}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.accountButton}
-          onPress={() => navigation.navigate("AccountSettingsScreen")}
-        >
-          <Text style={styles.accountButtonText}>Account Settings</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            style={styles.accountButton}
+            onPress={() => navigation.navigate("AccountSettingsScreen")}
+          >
+            <Text style={styles.accountButtonText}>Account Settings</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 20,
-  },
-  heading: {
-    fontSize: 30,
-    color: "#143D59",
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  form: {
-    width: "100%",
-  },
-  input: {
-    backgroundColor: "#F2F2F2",
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 5,
-  },
-  button: {
     backgroundColor: "#143D59",
-    padding: 15,
-    borderRadius: 5,
-    marginTop: 10,
+    justifyContent: "center",
   },
-  buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    textAlign: "center",
+  formContainer: {
+    marginHorizontal: 30,
   },
-  accountButton: {
-    marginTop: 10,
-  },
-  accountButtonText: {
-    color: "#143D59",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  logoutButton: {
+  label: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 15,
+    marginBottom: 10,
     marginTop: 20,
   },
-  logoutButtonText: {
-    color: "red",
-    fontSize: 16,
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    backgroundColor: "#fff",
+    padding: 10,
+    fontSize: 18,
+    borderRadius: 6,
+  },
+  button: {
+    backgroundColor: "#F4B41A",
+    paddingVertical: 12,
+    marginTop: 20,
+    borderRadius: 6,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
     textAlign: "center",
+    fontSize: 18,
+  },
+  accountButton: {
+    flex: 1,
+    backgroundColor: "green",
+    paddingVertical: 12,
+    marginTop: 20,
+    borderRadius: 6,
+  },
+  accountButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 18,
+  },
+  logoutButton: {
+    flex: 1,
+    backgroundColor: "red",
+    paddingVertical: 12,
+    marginTop: 20,
+    borderRadius: 6,
+  },
+  logoutButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 18,
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 20,
+    marginTop: 40,
   },
 });
 
