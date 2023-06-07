@@ -116,8 +116,7 @@ const SettingsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  // #143D59 - dark blue background
-  // #F4B41A - yellow button
+
   container: {
     flex: 1,
     backgroundColor: "#143D59",
