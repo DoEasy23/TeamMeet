@@ -41,7 +41,7 @@ const ProfileScreen = () => {
     const token = await AsyncStorage.getItem("token"); // retrieve token from local storage
     console.log(token);
     try {
-      const response = await axios.get(`${USER_API.trim()}/api/auth/me`, {
+      const response = await axios.get(`${USER_API}/api/auth/me`, {
         headers: { Authorization: token }, // pass token in headers
       });
       setUser(response.data);

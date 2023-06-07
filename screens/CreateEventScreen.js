@@ -74,7 +74,7 @@ const CreateEventScreen = () => {
       try {
         const token = await AsyncStorage.getItem("token");
         const response = await axios.post(
-          `${USER_API.trim()}/api/events`,
+          `${USER_API}/api/events`,
           {
             title,
             location,

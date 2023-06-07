@@ -18,7 +18,7 @@ const EventDetailScreen = ({ route }) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${USER_API.trim()}/api/auth/${event.createdBy}`
+          `${USER_API}/api/auth/${event.createdBy}`
         );
         setUser(response.data);
       } catch (error) {
