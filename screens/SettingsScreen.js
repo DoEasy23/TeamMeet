@@ -31,7 +31,7 @@ const SettingsScreen = () => {
 
     try {
       const response = await axios.put(
-        `${USER_API.trim()}/api/auth/updateProfile`,
+        `${USER_API}/api/auth/updateProfile`,
         {
           name,
           location,

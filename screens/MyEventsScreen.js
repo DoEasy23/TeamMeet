@@ -32,7 +32,7 @@ const MyEventsScreen = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`${USER_API.trim()}/api/events`);
+      const response = await axios.get(`${USER_API}/api/events`);
       if (response.data) {
         const filteredEvents = response.data.filter(
           (event) => event.createdBy === userId
@@ -46,7 +46,7 @@ const MyEventsScreen = () => {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get(`${USER_API.trim()}/api/join`);
+      const response = await axios.get(`${USER_API}/api/join`);
       setRequests(response.data);
     } catch (error) {
       console.error(error);
