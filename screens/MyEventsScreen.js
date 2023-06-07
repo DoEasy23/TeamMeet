@@ -65,6 +65,7 @@ const MyEventsScreen = () => {
         );
         setRequests(filteredEvents);
       }
+
     } catch (error) {
       console.error(error);
     }
