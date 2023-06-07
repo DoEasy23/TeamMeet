@@ -29,9 +29,12 @@ const EventDetailScreen = ({ route }) => {
     const fetchCurrentUserId = async () => {
       const token = await AsyncStorage.getItem("token");
       try {
-        const response = await axios.get(`${USER_API.trim()}:3000/api/auth/me`, {
-          headers: { Authorization: token },
-        });
+        const response = await axios.get(
+          `${USER_API.trim()}:3000/api/auth/me`,
+          {
+            headers: { Authorization: token },
+          }
+        );
         setCurrentUserId(response.data._id);
       } catch (error) {
         console.error(error);
