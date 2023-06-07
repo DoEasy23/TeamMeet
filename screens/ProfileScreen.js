@@ -6,9 +6,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import EventCart from "../components/EventCart";
 import { USER_API } from "@env";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
+  const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -53,6 +57,62 @@ const ProfileScreen = () => {
   if (!user) {
     return null; // Eğer kullanıcı verisi henüz yüklenmediyse null döndürerek yüklenmesini bekleyebiliriz.
   }
+  const changeAvatar = async () => {
+    try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permissionResult.granted) {
+        console.log("Permission to access camera roll denied");
+        return;
+      }
+
+      const pickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (pickerResult.canceled) {
+        console.log("User cancelled image selection");
+        return;
+      }
+
+      const { uri } = pickerResult.assets[0];
+      const newPath = `${FileSystem.documentDirectory}profile.jpg`;
+      await FileSystem.copyAsync({ from: uri, to: newPath });
+      setAvatar(newPath);
+      console.log(newPath)
+      console.log(pickerResult.assets[0])
+      const formData = new FormData();
+      formData.append("avatar", {
+        uri: newPath,
+        name: `${user.email}.jpg`,
+        type: "image/jpeg",
+      });
+
+      const token = await AsyncStorage.getItem("token");
+      try {
+        const response = await axios.put(
+            `${USER_API}/api/auth/updateAvatar`,
+            formData,
+            {
+              headers: {
+                Authorization: token,
+                "Content-Type": "multipart/form-data",
+              },
+            }
+        );
+        console.log(formData)
+        console.log(response.data);
+        setUser(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log("Error selecting profile image:", error);
+    }
+  };
+
 
   console.log(`${USER_API.trim()}/${user.avatarUrl}`);
 
@@ -64,6 +124,7 @@ const ProfileScreen = () => {
           <Text style={styles.location}>{user.location}</Text>
           <Text style={styles.sports}>{user.preferredSports}</Text>
         </View>
+        <TouchableOpacity onPress={changeAvatar}>
         <Image
           style={styles.avatar}
           source={{
@@ -72,6 +133,7 @@ const ProfileScreen = () => {
               : "https://www.w3schools.com/howto/img_avatar.png",
           }}
         />
+        </TouchableOpacity>
       </View>
       <View style={styles.bioContainer}>
         <Text style={styles.bioTitle}>Bio</Text>
