@@ -10,6 +10,7 @@ const EventDetailScreen = ({ route }) => {
   const { eventId, eventsData } = route.params;
   const [user, setUser] = useState({});
   const [currentUserId, setCurrentUserId] = useState("");
+  const [currentUserName, setCurrentUserName] = useState("");
   const navigation = useNavigation();
 
   const event = eventsData.find((item) => item._id == eventId);
@@ -33,6 +34,7 @@ const EventDetailScreen = ({ route }) => {
           headers: { Authorization: token },
         });
         setCurrentUserId(response.data._id);
+        setCurrentUserName(response.data.name);
       } catch (error) {
         console.error(error);
       }
@@ -142,6 +144,7 @@ const EventDetailScreen = ({ route }) => {
                 body: JSON.stringify({
                   eventId: event._id,
                   userId: currentUserId,
+                  requestUserName: currentUserName,
                 }),
               }).then((res) => {
                 navigation.navigate("Home", {
