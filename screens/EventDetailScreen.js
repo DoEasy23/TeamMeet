@@ -145,6 +145,7 @@ const EventDetailScreen = ({ route }) => {
                   eventId: event._id,
                   userId: currentUserId,
                   requestUserName: currentUserName,
+                  ownerId: event.createdBy,
                 }),
               }).then((res) => {
                 navigation.navigate("Home", {
