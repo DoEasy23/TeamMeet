@@ -10,24 +10,20 @@ const MyEventsScreen = () => {
   const [userEvents, setUserEvents] = useState([]);
   const [requests, setRequests] = useState([]);
   const [userId, setUserId] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        const decodedToken = jwtDecode(token);
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const decodedToken = jwtDecode(token);
 
-        const { id: userId } = decodedToken.user;
+      const { id: userId } = decodedToken.user;
 
-        setUserId(userId);
-      } catch (error) {
-        console.log("Token çözümlenirken bir hata oluştu", error);
-      }
-    };
-    fetchUserData();
-    fetchEvents();
-    fetchRequests();
-  }, [events]);
+      setUserId(userId);
+    } catch (error) {
+      console.log("Token çözümlenirken bir hata oluştu", error);
+    }
+  };
 
   const fetchEvents = async () => {
     try {
@@ -51,7 +47,7 @@ const MyEventsScreen = () => {
         let filteredEvents = [];
         events.forEach((event) => {
           response.data.forEach((request) => {
-            if (request.event === event._id) {
+            if (request.event === event._id && request.status === "Pending") {
               filteredEvents.push(event);
             }
           });
@@ -66,6 +62,25 @@ const MyEventsScreen = () => {
     }
   };
 
+  const fetchDatas = async () => {
+    await fetchUserData();
+    await fetchEvents();
+    await fetchRequests();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchDatas();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.heading}>Loading....</Text>
+      </View>
+    );
+  }
+
   const renderEventItem = ({ item }) => (
     <View style={styles.eventItem}>
       <Text style={styles.eventTitle}>{item.title}</Text>
@@ -77,7 +92,7 @@ const MyEventsScreen = () => {
 
   const renderRequestItem = ({ item }) => (
     <View style={styles.requestItem}>
-      <Text style={styles.requestUser}>{item.user.name}</Text>
+      <Text style={styles.requestUser}>{item.description}</Text>
       <Text style={styles.requestStatus}>{item.status}</Text>
     </View>
   );
@@ -93,6 +108,7 @@ const MyEventsScreen = () => {
         style={styles.eventList}
       />
       <Text style={styles.subHeading}>Join Requests:</Text>
+
       <FlatList
         data={requests}
         renderItem={renderRequestItem}
