@@ -16,12 +16,10 @@ const MyEventsScreen = () => {
       try {
         const token = await AsyncStorage.getItem("token");
         const decodedToken = jwtDecode(token);
-        console.log(token);
+
         const { id: userId } = decodedToken.user;
 
-        console.log(decodedToken);
         setUserId(userId);
-        console.log("User ID: ", userId);
       } catch (error) {
         console.log("Token çözümlenirken bir hata oluştu", error);
       }
@@ -29,7 +27,7 @@ const MyEventsScreen = () => {
     fetchUserData();
     fetchEvents();
     fetchRequests();
-  }, []);
+  }, [events]);
 
   const fetchEvents = async () => {
     try {
@@ -58,14 +56,11 @@ const MyEventsScreen = () => {
             }
           });
         });
-        console.log("Filtered Events: ", filteredEvents);
-        console.log("User ID: ", userId);
         filteredEvents = filteredEvents.filter(
           (event) => event.createdBy === userId
         );
         setRequests(filteredEvents);
       }
-
     } catch (error) {
       console.error(error);
     }

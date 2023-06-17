@@ -44,7 +44,12 @@ const CreateEventScreen = () => {
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
+    if (event?.type === "dismissed") {
+      // Do not update the date if dismissed
+      return;
+    }
     setDate(currentDate);
+    console.log(date);
   };
 
   const showDatepicker = () => {
@@ -88,7 +93,7 @@ const CreateEventScreen = () => {
         setSuccess(response.data.message);
         setTitle("");
         setLocation("");
-        setDate("");
+        setDate(new Date());
         setDescription("");
       } catch (error) {
         setError(error.response.data.error);
