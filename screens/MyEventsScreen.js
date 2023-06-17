@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import axios from "axios";
 import { USER_API } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -44,17 +50,14 @@ const MyEventsScreen = () => {
     try {
       const response = await axios.get(`${USER_API}/api/join`);
       if (response.data) {
-        let filteredEvents = [];
-        events.forEach((event) => {
-          response.data.forEach((request) => {
-            if (request.event === event._id && request.status === "Pending") {
-              filteredEvents.push(event);
-            }
-          });
-        });
-        filteredEvents = filteredEvents.filter(
-          (event) => event.createdBy === userId
+        const filteredEvents = response.data.filter(
+          (event) => event.eventOwner === userId
         );
+        const AcceptedEvents = response.data.filter(
+          (event) => event.status === "Accepted" && event.user === userId
+        );
+
+        setEvents((prev) => [...prev, ...AcceptedEvents]);
         setRequests(filteredEvents);
       }
     } catch (error) {
@@ -71,7 +74,7 @@ const MyEventsScreen = () => {
 
   useEffect(() => {
     fetchDatas();
-  }, []);
+  }, [loading]);
 
   if (loading) {
     return (
@@ -80,6 +83,32 @@ const MyEventsScreen = () => {
       </View>
     );
   }
+
+  const handleAccept = async (id) => {
+    try {
+      const response = await axios.put(`${USER_API}/api/join/${id}`, {
+        status: "Accepted",
+      });
+      if (response.data) {
+        fetchRequests();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleReject = async (id) => {
+    try {
+      const response = await axios.put(`${USER_API}/api/join/${id}`, {
+        status: "Rejected",
+      });
+      if (response.data) {
+        fetchRequests();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const renderEventItem = ({ item }) => (
     <View style={styles.eventItem}>
@@ -90,12 +119,38 @@ const MyEventsScreen = () => {
     </View>
   );
 
-  const renderRequestItem = ({ item }) => (
-    <View style={styles.requestItem}>
-      <Text style={styles.requestUser}>{item.description}</Text>
-      <Text style={styles.requestStatus}>{item.status}</Text>
-    </View>
-  );
+  const renderRequestItem = ({ item }) => {
+    const event = events.find((event) => event._id === item.event);
+
+    return (
+      item.status === "Pending" && (
+        <View style={styles.eventItem}>
+          <Text style={styles.eventTitle}>
+            Request Owner: {item.requestUserName}
+          </Text>
+          <Text style={styles.eventTitle}>{event.title}</Text>
+          <Text style={styles.eventDescription}>{event.description}</Text>
+          <Text style={styles.eventLocation}>{event.location}</Text>
+          <Text style={styles.eventDate}>{event.date.split("T")[0]}</Text>
+          <Text style={styles.eventDate}>{item.status}</Text>
+          <View style={styles.Buttons}>
+            <TouchableOpacity
+              style={styles.acceptButton}
+              onPress={() => handleAccept(item._id)}
+            >
+              <Text style={styles.ButtonText}>Accept</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.rejectButton}
+              onPress={() => handleReject(item._id)}
+            >
+              <Text style={styles.ButtonText}>Reject</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -183,6 +238,33 @@ const styles = StyleSheet.create({
   },
   requestStatus: {
     fontSize: 14,
+  },
+  Buttons: {
+    marginTop: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8,
+  },
+  acceptButton: {
+    width: "50%",
+    backgroundColor: "#1E90FF",
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 8,
+  },
+  ButtonText: {
+    marginTop: 4,
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+  },
+  rejectButton: {
+    width: "50%",
+    backgroundColor: "#FF0000",
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 8,
   },
 });
 
