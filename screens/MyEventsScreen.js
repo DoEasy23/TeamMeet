@@ -53,11 +53,18 @@ const MyEventsScreen = () => {
         const filteredEvents = response.data.filter(
           (event) => event.eventOwner === userId
         );
-        const AcceptedEvents = response.data.filter(
+        let AcceptedEvents = response.data.filter(
           (event) => event.status === "Accepted" && event.user === userId
         );
 
-        setEvents((prev) => [...prev, ...AcceptedEvents]);
+        AcceptedEvents = AcceptedEvents.map((event) => {
+          const eventDetails = events.find(
+            (eventDetail) => eventDetail._id === event.event
+          );
+          return eventDetails;
+        });
+
+        setUserEvents((prev) => [...prev, ...AcceptedEvents]);
         setRequests(filteredEvents);
       }
     } catch (error) {
