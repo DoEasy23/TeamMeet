@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -21,8 +21,15 @@ const SettingsScreen = () => {
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const [token, setToken] = useState("");
 
-  const token = AsyncStorage.getItem("token");
+  useEffect(() => {
+    async function getToken() {
+      const token = await AsyncStorage.getItem("token");
+      setToken(token);
+    }
+    getToken();
+  }, []);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -116,7 +123,6 @@ const SettingsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: "#143D59",

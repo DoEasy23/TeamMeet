@@ -23,20 +23,22 @@ const EventDetailScreen = ({ route }) => {
         );
         setUser(response.data);
       } catch (error) {
-        console.error(error);
+        /* console.log("fetchUserData error");
+        console.error(error); */
       }
     };
 
     const fetchCurrentUserId = async () => {
       const token = await AsyncStorage.getItem("token");
       try {
-        const response = await axios.get(`${USER_API.trim()}/api/auth/me`, {
+        const response = await axios.get(`${USER_API}/api/auth/me`, {
           headers: { Authorization: token },
         });
         setCurrentUserId(response.data._id);
         setCurrentUserName(response.data.name);
       } catch (error) {
-        console.error(error);
+        /* console.log("fetchCurrentUserId error");
+        console.error(error); */
       }
     };
 
@@ -53,8 +55,6 @@ const EventDetailScreen = ({ route }) => {
   }
 
   const isCreator = currentUserId === event.createdBy;
-
-  console.log(event);
 
   return (
     <View style={styles.container}>
@@ -136,7 +136,7 @@ const EventDetailScreen = ({ route }) => {
               marginLeft: "auto",
             }}
             onPress={() =>
-              fetch(`${USER_API.trim()}/api/join`, {
+              fetch(`${USER_API}/api/join`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

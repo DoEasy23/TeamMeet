@@ -10,6 +10,7 @@ import axios from "axios";
 import { USER_API } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
+import { useNavigation } from "@react-navigation/native";
 
 const MyEventsScreen = () => {
   const [events, setEvents] = useState([]);
@@ -17,6 +18,7 @@ const MyEventsScreen = () => {
   const [requests, setRequests] = useState([]);
   const [userId, setUserId] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   const fetchUserData = async () => {
     try {
@@ -117,12 +119,25 @@ const MyEventsScreen = () => {
     }
   };
 
+  const handleEventPress = (eventId) => {
+    navigation.navigate("Event Detail", {
+      eventId: eventId,
+      eventsData: events,
+    });
+  };
+
   const renderEventItem = ({ item }) => (
     <View style={styles.eventItem}>
-      <Text style={styles.eventTitle}>{item.title}</Text>
-      <Text style={styles.eventDescription}>{item.description}</Text>
-      <Text style={styles.eventLocation}>{item.location}</Text>
-      <Text style={styles.eventDate}>{item.date.split("T")[0]}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          handleEventPress(item._id);
+        }}
+      >
+        <Text style={styles.eventTitle}>{item.title}</Text>
+        <Text style={styles.eventDescription}>{item.description}</Text>
+        <Text style={styles.eventLocation}>{item.location}</Text>
+        <Text style={styles.eventDate}>{item.date.split("T")[0]}</Text>
+      </TouchableOpacity>
     </View>
   );
 
