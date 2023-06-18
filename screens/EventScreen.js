@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -8,47 +8,28 @@ import {
 } from "react-native";
 import EventCart from "../components/EventCart";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { USER_API } from "@env";
 
-const eventsData = [
-  {
-    id: 1,
-    date: "March 28, 2023",
-    location: "New York",
-    sport: "Basketball",
-    user: { name: "John Doe", points: 25 },
-  },
-  {
-    id: 2,
-    date: "April 2, 2023",
-    location: "London",
-    sport: "Tennis",
-    user: { name: "Jane Smith", points: 18 },
-  },
-  {
-    id: 3,
-    date: "April 8, 2023",
-    location: "Paris",
-    sport: "Football",
-    user: { name: "Bob Johnson", points: 31 },
-  },
-  {
-    id: 4,
-    date: "April 15, 2023",
-    location: "Los Angeles",
-    sport: "Basketball",
-    user: { name: "Alice Williams", points: 12 },
-  },
-  {
-    id: 5,
-    date: "April 23, 2023",
-    location: "Toronto",
-    sport: "Tennis",
-    user: { name: "Tom Brown", points: 16 },
-  },
-];
-
-const EventScreen = () => {
+const EventScreen = ({ route }) => {
+  const { sport, location } = route.params;
+  console.log(sport, location);
   const navigation = useNavigation();
+  const [eventsData, setEventsData] = useState([]);
+
+  useEffect(() => {
+    const fetchEventData = async () => {
+      try {
+        const response = await axios.get(`${USER_API}/api/events`);
+        setEventsData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEventData();
+  }, []);
 
   const handleEventPress = (eventId) => {
     navigation.navigate("Event Detail", { eventId: eventId, eventsData });
@@ -56,27 +37,44 @@ const EventScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {eventsData.map((event) => (
-        <TouchableOpacity
-          key={event.id}
-          onPress={() => handleEventPress(event.id)}
-        >
-          <EventCart
-            date={event.date}
-            location={event.location}
-            sport={event.sport}
-            user={event.user}
-          />
-        </TouchableOpacity>
-      ))}
+      {eventsData.find(
+        (event) =>
+          event.sport === sport &&
+          event.location.toUpperCase() === location.toUpperCase()
+      ) ? (
+        eventsData
+          .filter(
+            (event) =>
+              event.sport === sport &&
+              event.location.toUpperCase() === location.toUpperCase()
+          )
+          .map((event) => (
+            <TouchableOpacity
+              key={event._id}
+              onPress={() => handleEventPress(event._id)}
+            >
+              <EventCart event={event} />
+            </TouchableOpacity>
+          ))
+      ) : (
+        <Text style={styles.errorText}>No event found</Text>
+      )}
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
+    height: "100%",
     backgroundColor: "#143D59",
     alignItems: "center",
     justifyContent: "center",
+  },
+  errorText: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
 

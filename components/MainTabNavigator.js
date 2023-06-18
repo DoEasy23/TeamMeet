@@ -12,7 +12,9 @@ import SignupScreen from "../screens/SignupScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import EventDetailScreen from "../screens/EventDetailScreen";
-
+import AccountSettingsScreen from "../screens/AccountSettingsScreen";
+import CreateEventScreen from "../screens/CreateEventScreen";
+import MyEventsScreen from "../screens/MyEventsScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -26,21 +28,23 @@ const HomeStack = () => {
         headerTintColor: "#F4B41A",
       }}
     >
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ title: "Welcome" }}
-      />
-      <Stack.Screen
-        name="Signup"
-        component={SignupScreen}
-        options={{ title: "Signup" }}
-      />
+
+
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ title: "Home" }}
+        options={{ title: "Home", headerLeft: null, gestureEnabled: false }}
       />
+        <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ title: "Welcome" }}
+        />
+        <Stack.Screen
+            name="Signup"
+            component={SignupScreen}
+            options={{ title: "Signup" }}
+        />
       <Stack.Screen
         name="EventScreen"
         component={EventScreen}
@@ -53,6 +57,8 @@ const HomeStack = () => {
         component={EventDetailScreen}
         options={{ title: "Event Detail" }}
       />
+        <Stack.Screen name={"CreateEventScreen"} component={CreateEventScreen} options={{title: "Create Event"}}/>
+        <Stack.Screen name={"MyEventsScreen"} component={MyEventsScreen} options={{title: "My Events"}}/>
     </Stack.Navigator>
   );
 };
@@ -106,7 +112,13 @@ const ProfileStack = () => {
         component={SettingsScreen}
         options={{ title: "Settings" }}
       />
+<Stack.Screen
+        name="AccountSettingsScreen"
+        component={AccountSettingsScreen}
+        options={{ title: "Account Settings" }}
+        />
     </Stack.Navigator>
+
   );
 };
 
@@ -120,26 +132,16 @@ const MainTabNavigator = () => {
         tabStyle: { justifyContent: "center", alignItems: "center" },
       }}
     >
-      <Tab.Screen
-        name="Messages"
-        component={MessageStack}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="mail-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Hometab"
-        component={HomeStack}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
-          ),
-        }}
-      />
+        <Tab.Screen
+            name="Hometab"
+            component={HomeStack}
+            options={{
+                headerShown: false,
+                tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="home-outline" size={size} color={color} />
+                ),
+            }}
+        />
       <Tab.Screen
         name="Profile"
         component={ProfileStack}

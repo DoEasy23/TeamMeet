@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -6,15 +7,40 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { USER_API } from "@env";
 
-const LoginScreen = ({ navigation }) => {
+const apiUrl = USER_API;
+const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigation = useNavigation();
 
-  const handleLogin = () => {
-    // burada login işlemini yapabilirsiniz, örneğin backend'e post request atabilirsiniz
-    console.log(`email: ${email}, password: ${password}`);
-    navigation.navigate("Home");
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        navigation.navigate("Home");
+      }
+    };
+
+    checkToken();
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`${apiUrl}/api/auth/login`, {
+        email,
+        password,
+      });
+      const token = response.data.token;
+      await AsyncStorage.setItem("token", token); // save token to local storage
+      console.log(response.data); // print response data from your backend
+      navigation.navigate("Home");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
