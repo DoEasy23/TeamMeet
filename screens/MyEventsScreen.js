@@ -28,9 +28,7 @@ const MyEventsScreen = () => {
       const { id: userId } = decodedToken.user;
 
       setUserId(userId);
-    } catch (error) {
-      console.log("Token çözümlenirken bir hata oluştu", error);
-    }
+    } catch (error) {}
   };
 
   const fetchEvents = async () => {
@@ -43,9 +41,7 @@ const MyEventsScreen = () => {
         );
         setUserEvents(filteredEvents);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const fetchRequests = async () => {
@@ -61,7 +57,8 @@ const MyEventsScreen = () => {
 
         AcceptedEvents = AcceptedEvents.map((event) => {
           const eventDetails = events.find(
-            (eventDetail) => eventDetail._id === event.event
+            (eventDetail) =>
+              eventDetail._id === event.event && eventDetail !== undefined
           );
           return eventDetails;
         });
@@ -69,9 +66,7 @@ const MyEventsScreen = () => {
         setUserEvents((prev) => [...prev, ...AcceptedEvents]);
         setRequests(filteredEvents);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const fetchDatas = async () => {
@@ -101,9 +96,7 @@ const MyEventsScreen = () => {
       if (response.data) {
         fetchRequests();
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const handleReject = async (id) => {
@@ -114,9 +107,7 @@ const MyEventsScreen = () => {
       if (response.data) {
         fetchRequests();
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const handleEventPress = (eventId) => {
@@ -126,20 +117,25 @@ const MyEventsScreen = () => {
     });
   };
 
-  const renderEventItem = ({ item }) => (
-    <View style={styles.eventItem}>
-      <TouchableOpacity
-        onPress={() => {
-          handleEventPress(item._id);
-        }}
-      >
-        <Text style={styles.eventTitle}>{item.title}</Text>
-        <Text style={styles.eventDescription}>{item.description}</Text>
-        <Text style={styles.eventLocation}>{item.location}</Text>
-        <Text style={styles.eventDate}>{item.date.split("T")[0]}</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const renderEventItem = ({ item }) => {
+    console.log(item);
+    return (
+      item !== undefined && (
+        <View style={styles.eventItem}>
+          <TouchableOpacity
+            onPress={() => {
+              handleEventPress(item._id);
+            }}
+          >
+            <Text style={styles.eventTitle}>{item.title}</Text>
+            <Text style={styles.eventDescription}>{item.description}</Text>
+            <Text style={styles.eventLocation}>{item.location}</Text>
+            <Text style={styles.eventDate}>{item.date.split("T")[0]}</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    );
+  };
 
   const renderRequestItem = ({ item }) => {
     const event = events.find((event) => event._id === item.event);
@@ -181,7 +177,7 @@ const MyEventsScreen = () => {
       <FlatList
         data={userEvents}
         renderItem={renderEventItem}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item?._id}
         style={styles.eventList}
       />
       <Text style={styles.subHeading}>Join Requests:</Text>

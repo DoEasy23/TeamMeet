@@ -104,9 +104,9 @@ const EventDetailScreen = ({ route }) => {
                 marginLeft: "auto",
               }}
               onPress={() =>
-                navigation.navigate("EditEvent", {
+                navigation.navigate("EditEventScreen", {
                   eventId: event._id,
-                  eventsData: eventsData,
+                  eventData: event,
                 })
               }
             >
@@ -118,12 +118,15 @@ const EventDetailScreen = ({ route }) => {
                 color: "#143D59",
                 marginLeft: 5,
               }}
-              onPress={() =>
-                navigation.navigate("DeleteEvent", {
-                  eventId: event._id,
-                  eventsData: eventsData,
-                })
-              }
+              onPress={() => {
+                axios.delete(`${USER_API}/api/events/${event._id}`);
+                navigation.navigate("Home", {
+                  screen: "Home",
+                  params: {
+                    screen: "Home",
+                  },
+                });
+              }}
             >
               Delete
             </Text>
@@ -148,6 +151,9 @@ const EventDetailScreen = ({ route }) => {
                   ownerId: event.createdBy,
                 }),
               }).then((res) => {
+                if (res.status === 400) {
+                  return alert("You have already requested to join this event");
+                }
                 navigation.navigate("Home", {
                   screen: "Home",
                   params: {

@@ -14,18 +14,21 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import jwtDecode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { USER_API } from "@env";
+import { useNavigation } from "@react-navigation/native";
 
-const CreateEventScreen = () => {
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [sport, setSport] = useState("");
-  const [description, setDescription] = useState("");
+const EditEventScreen = ({ route }) => {
+  const { eventId, eventData } = route.params;
+  const [title, setTitle] = useState(eventData.title);
+  const [location, setLocation] = useState(eventData.location);
+  const [date, setDate] = useState(new Date(eventData.date));
+  const [sport, setSport] = useState(eventData.sport);
+  const [description, setDescription] = useState(eventData.description);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [userId, setUserId] = useState("");
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -42,7 +45,6 @@ const CreateEventScreen = () => {
     fetchUserData();
   }, []);
 
-  
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
@@ -58,12 +60,14 @@ const CreateEventScreen = () => {
     setShowDatePicker(true);
   };
 
-  const handleCreateEvent = async () => {
+  const handleEditEvent = async () => {
     if (!userId) {
       console.log("User ID is not available");
       return;
     }
+
     const currentDate = new Date();
+
     if (date < currentDate) {
       Alert.alert(
         "Invalid Date",
@@ -76,8 +80,8 @@ const CreateEventScreen = () => {
 
       try {
         const token = await AsyncStorage.getItem("token");
-        const response = await axios.post(
-          `${USER_API}/api/events`,
+        const response = await axios.put(
+          `${USER_API}/api/events/${eventId}`,
           {
             title,
             location,
@@ -102,6 +106,12 @@ const CreateEventScreen = () => {
       }
 
       setLoading(false);
+      navigation.navigate("Home", {
+        screen: "Home",
+        params: {
+          screen: "Home",
+        },
+      });
     }
   };
 
@@ -152,11 +162,11 @@ const CreateEventScreen = () => {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={handleCreateEvent}
+          onPress={handleEditEvent}
           disabled={loading}
         >
           <Text style={styles.buttonText}>
-            {loading ? "Creating Event..." : "Create Event"}
+            {loading ? "Editing Event..." : "Edit Event"}
           </Text>
         </TouchableOpacity>
 
@@ -220,4 +230,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateEventScreen;
+export default EditEventScreen;

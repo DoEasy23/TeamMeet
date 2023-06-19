@@ -15,6 +15,7 @@ import EventDetailScreen from "../screens/EventDetailScreen";
 import AccountSettingsScreen from "../screens/AccountSettingsScreen";
 import CreateEventScreen from "../screens/CreateEventScreen";
 import MyEventsScreen from "../screens/MyEventsScreen";
+import EditEventScreen from "../screens/EditEventScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -28,23 +29,21 @@ const HomeStack = () => {
         headerTintColor: "#F4B41A",
       }}
     >
-
-
       <Stack.Screen
         name="Home"
         component={HomeScreen}
         options={{ title: "Home", headerLeft: null, gestureEnabled: false }}
       />
-        <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ title: "Welcome" }}
-        />
-        <Stack.Screen
-            name="Signup"
-            component={SignupScreen}
-            options={{ title: "Signup" }}
-        />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ title: "Welcome" }}
+      />
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{ title: "Signup" }}
+      />
       <Stack.Screen
         name="EventScreen"
         component={EventScreen}
@@ -57,8 +56,21 @@ const HomeStack = () => {
         component={EventDetailScreen}
         options={{ title: "Event Detail" }}
       />
-        <Stack.Screen name={"CreateEventScreen"} component={CreateEventScreen} options={{title: "Create Event"}}/>
-        <Stack.Screen name={"MyEventsScreen"} component={MyEventsScreen} options={{title: "My Events"}}/>
+      <Stack.Screen
+        name={"CreateEventScreen"}
+        component={CreateEventScreen}
+        options={{ title: "Create Event" }}
+      />
+      <Stack.Screen
+        name={"MyEventsScreen"}
+        component={MyEventsScreen}
+        options={{ title: "My Events" }}
+      />
+      <Stack.Screen
+        name={"EditEventScreen"}
+        component={EditEventScreen}
+        options={{ title: "Edit Event" }}
+      />
     </Stack.Navigator>
   );
 };
@@ -112,13 +124,12 @@ const ProfileStack = () => {
         component={SettingsScreen}
         options={{ title: "Settings" }}
       />
-<Stack.Screen
+      <Stack.Screen
         name="AccountSettingsScreen"
         component={AccountSettingsScreen}
         options={{ title: "Account Settings" }}
-        />
+      />
     </Stack.Navigator>
-
   );
 };
 
@@ -132,16 +143,16 @@ const MainTabNavigator = () => {
         tabStyle: { justifyContent: "center", alignItems: "center" },
       }}
     >
-        <Tab.Screen
-            name="Hometab"
-            component={HomeStack}
-            options={{
-                headerShown: false,
-                tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="home-outline" size={size} color={color} />
-                ),
-            }}
-        />
+      <Tab.Screen
+        name="Hometab"
+        component={HomeStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" size={size} color={color} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="Profile"
         component={ProfileStack}
