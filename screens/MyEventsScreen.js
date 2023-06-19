@@ -28,9 +28,7 @@ const MyEventsScreen = () => {
       const { id: userId } = decodedToken.user;
 
       setUserId(userId);
-    } catch (error) {
-      console.log("Token çözümlenirken bir hata oluştu", error);
-    }
+    } catch (error) {}
   };
 
   const fetchEvents = async () => {
@@ -43,9 +41,7 @@ const MyEventsScreen = () => {
         );
         setUserEvents(filteredEvents);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const fetchRequests = async () => {
@@ -69,9 +65,7 @@ const MyEventsScreen = () => {
         setUserEvents((prev) => [...prev, ...AcceptedEvents]);
         setRequests(filteredEvents);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const fetchDatas = async () => {
@@ -101,9 +95,7 @@ const MyEventsScreen = () => {
       if (response.data) {
         fetchRequests();
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const handleReject = async (id) => {
@@ -114,9 +106,7 @@ const MyEventsScreen = () => {
       if (response.data) {
         fetchRequests();
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const handleEventPress = (eventId) => {
